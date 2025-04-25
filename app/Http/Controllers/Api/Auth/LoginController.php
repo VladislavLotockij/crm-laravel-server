@@ -18,11 +18,11 @@ class LoginController extends Controller
         if (!$existingUser || Hash::check($data['password'], $existingUser->password))
             return response()->json(['message' => 'Invalid credentials.'], 401);
 
-        $existingUser->createToken('auth_token')->plainTextToken;
+        $token = $existingUser->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login successful.',
-            'token' => $existingUser->createToken('auth_token')->plainTextToken,
+            'token' => $token,
         ], 200);
     }
 }
