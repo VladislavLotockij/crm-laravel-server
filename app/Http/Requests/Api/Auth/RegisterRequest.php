@@ -57,6 +57,9 @@ class RegisterRequest extends FormRequest
             'password_confirmation.required' => 'The password confirmation field is required.',
             'password_confirmation.string' => 'The password confirmation must be a string.',
             'password_confirmation.min' => 'The password confirmation must be at least 8 characters.',
+
+            'role.required' => 'The role field is required.',
+            'role.in' => 'The selected role is invalid.',
         ];
     }
 
@@ -70,6 +73,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'name',
             'email' => 'email',
+            'role' => 'role',
             'password' => 'password',
             'password_confirmation' => 'password confirmation',
         ];

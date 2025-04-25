@@ -16,8 +16,6 @@ class RegisterController extends Controller
         $data = $request->validated();
         $temporaryPassword = Str::random(12);
 
-        //TODO: add a role for user
-
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
