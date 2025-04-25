@@ -24,6 +24,8 @@ class RegisterController extends Controller
             'password' => Hash::make($temporaryPassword),
         ]);
 
+        $user->assignRole($data['role']);
+
         $user->notify(new NewUserWelcomeNotification(($temporaryPassword)));
 
         return response()->json(['message' => 'User created successfully. Welcome email sent.'], 201);
