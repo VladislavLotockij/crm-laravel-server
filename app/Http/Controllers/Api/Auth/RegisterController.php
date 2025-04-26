@@ -6,26 +6,40 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\RegisterRequest;
 use App\Models\User;
 use App\Notifications\NewUserWelcomeNotification;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
-    public function __invoke(RegisterRequest $request)
+    /**
+     * Handle user registration.
+     *
+     * @param RegisterRequest $request The registration request containing user data
+     * @return JsonResponse
+     */
+    public function __invoke(RegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $temporaryPassword = Str::random(12);
+
+        // If password is not provided, generate a random 12-character password
+        // containing letters and numbers but no symbols (for user experience)
+        $password = $data['password'] ?? Str::password(12, letters: true, numbers: true, symbols: false);
 
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($temporaryPassword),
+            'password' => Hash::make($password),
         ]);
 
+        // Assign specified role to the user
         $user->assignRole($data['role']);
 
-        $user->notify(new NewUserWelcomeNotification(($temporaryPassword)));
+        // Send welcome email with login credentials to the new user
+        $user->notify(new NewUserWelcomeNotification($password));
 
-        return response()->json(['message' => 'User created successfully. Welcome email sent.'], 201);
+        return response()->json([
+            'message' => 'User created successfully. Welcome email sent.'
+        ], 201);
     }
 }

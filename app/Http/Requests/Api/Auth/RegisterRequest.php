@@ -25,9 +25,9 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
             'role' => ['required', 'in:admin,head,manager,guest'],
-            'password_confirmation' => 'required|string|min:8',
+            'password' => 'nullable|string|min:8|confirmed',
+            'password_confirmation' => 'nullable|string|min:8',
         ];
     }
 
@@ -49,12 +49,10 @@ class RegisterRequest extends FormRequest
             'email.max' => 'The email must not exceed 255 characters.',
             'email.unique' => 'This email is already taken.',
 
-            'password.required' => 'The password field is required.',
             'password.string' => 'The password must be a string.',
             'password.min' => 'The password must be at least 8 characters.',
             'password.confirmed' => 'The passwords do not match.',
 
-            'password_confirmation.required' => 'The password confirmation field is required.',
             'password_confirmation.string' => 'The password confirmation must be a string.',
             'password_confirmation.min' => 'The password confirmation must be at least 8 characters.',
 
