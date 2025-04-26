@@ -22,8 +22,6 @@ class RegisterController extends Controller
     {
         $data = $request->validated();
 
-        // If password is not provided, generate a random 12-character password
-        // containing letters and numbers but no symbols (for user experience)
         $password = $data['password'] ?? Str::password(12, letters: true, numbers: true, symbols: false);
 
         $user = User::create([
@@ -32,10 +30,8 @@ class RegisterController extends Controller
             'password' => Hash::make($password),
         ]);
 
-        // Assign specified role to the user
         $user->assignRole($data['role']);
 
-        // Send welcome email with login credentials to the new user
         $user->notify(new NewUserWelcomeNotification($password));
 
         return response()->json([
