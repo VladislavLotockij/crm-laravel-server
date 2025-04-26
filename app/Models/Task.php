@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
@@ -17,23 +18,21 @@ class Task extends Model
         'created_by'
     ];
 
-    protected $dates = [
-        'due_date',
-        'created_at',
-        'updated_at'
+    protected $casts = [
+        'due_date' => 'datetime',
     ];
 
-    public function assignedTo()
+    public function assignedTo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    public function createdBy()
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function deal()
+    public function deal(): BelongsTo
     {
         return $this->belongsTo(Deal::class);
     }

@@ -20,8 +20,11 @@ return new class extends Migration
             $table->string('company_name')->nullable();
             $table->string('address')->nullable();
             $table->enum('status', ['lead', 'active', 'inactive'])->default('lead');
-            $table->foreignId('manager_id')->constrained('users')->nullable();
+            $table->foreignId('manager_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
+
+            $table->index('status');
+            $table->index('email');
         });
     }
 

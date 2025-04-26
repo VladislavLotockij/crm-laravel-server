@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('department_heads', function (Blueprint $table) {
             $table->id();
-            $table->text('content');
-            $table->foreignId('client_id')->constrained('clients');
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
+
+            $table->unique(['department_id', 'user_id']);
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('department_heads');
     }
 };

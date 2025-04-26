@@ -17,9 +17,12 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('amount', 10, 2)->nullable();
             $table->enum('status', ['new', 'in_progress', 'won', 'lost'])->default('new');
-            $table->foreignId('client_id')->constrained('clients');
-            $table->foreignId('manager_id')->constrained('users');
+            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->foreignId('manager_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
+
+            $table->index('status');
+            $table->index('amount');
         });
     }
 
