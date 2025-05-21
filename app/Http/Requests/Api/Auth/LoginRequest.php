@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Auth;
 
+use App\DTOs\Auth\LoginDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\File;
 
@@ -58,5 +59,9 @@ class LoginRequest extends FormRequest
             'email' => 'email',
             'password' => 'password',
         ];
+    }
+
+    public function toDTO(): LoginDTO {
+        return LoginDTO::fromArray($this->validated());
     }
 }
