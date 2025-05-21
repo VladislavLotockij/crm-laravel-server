@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\RegisterRequest;
-use App\Models\User;
-use App\Notifications\NewUserWelcomeNotification;
+use App\Services\Auth\RegisterService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
+    public function __construct(
+        protected RegisterService $registerService,
+    ) {}
     /**
      * Handle user registration.
      *
@@ -20,19 +22,9 @@ class RegisterController extends Controller
      */
     public function __invoke(RegisterRequest $request): JsonResponse
     {
-        $data = $request->validated();
+        $registerDTO = $request->toDTO();
 
-        $password = $data['password'] ?? Str::password(12, letters: true, numbers: true, symbols: false);
-
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($password),
-        ]);
-
-        $user->assignRole($data['role']);
-
-        $user->notify(new NewUserWelcomeNotification($password));
+        $this->registerService->handle($registerDTO);
 
         return response()->json([
             'message' => 'User created successfully. Welcome email sent.'

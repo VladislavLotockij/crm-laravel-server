@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Api\Auth;
 
+use App\DTOs\Auth\RegisterDTO;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
 
 class RegisterRequest extends FormRequest
 {
@@ -75,5 +77,9 @@ class RegisterRequest extends FormRequest
             'password' => 'password',
             'password_confirmation' => 'password confirmation',
         ];
+    }
+
+    public function toDTO(): RegisterDTO {
+        return RegisterDTO::fromArray($this->validated());
     }
 }
